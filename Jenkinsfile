@@ -9,10 +9,7 @@ node {
         sh 'npm run build'
     }
     stage('Test') {
-        try {
-            sh 'npm run test:jenkins'
-        } finally {
-            junit checksName: 'Tests', testResults: 'junit.xml'
-        }
+        sh 'npm run test:jenkins'
+        junit checksName: 'Tests', testResults: 'junit.xml'
     }
 }
