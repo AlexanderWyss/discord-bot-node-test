@@ -36,6 +36,7 @@
   },
   "jest": {
     "rootDir": "dist",
-    "testResultsProcessor": "jest-junit"
+    "testResultsProcessor": "jest-junit",
+    "testFailureExitCode": 0
   }
 }
