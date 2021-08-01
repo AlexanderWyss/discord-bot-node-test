@@ -7,7 +7,7 @@
     "build": "tsc",
     "pretest": "npm run build",
     "test": "jest",
-    "test:jenkins": "tsc && jest --ci"
+    "test:jenkins": "jest --ci"
   },
   "dependencies": {
     "@discordjs/opus": "^0.5.0",
