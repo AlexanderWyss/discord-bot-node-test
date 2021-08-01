@@ -11,7 +11,7 @@ describe('Discord', () => {
     await discord.open();
   });
   afterAll(async () => {
-    await driver.quit();
+    await Driver.stop();
   })
   it('Test', async () => {
     await discord.search('Bohemian rapsody');

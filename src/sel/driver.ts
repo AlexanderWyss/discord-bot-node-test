@@ -6,10 +6,20 @@ export class Driver {
 
   public static async start(): Promise<WebDriver> {
     if (!this.driver) {
-      const serviceBuilder = new firefox.ServiceBuilder("geckodriver.exe");
+      let geckoPath;
+      let options;
+      if (process.env.ON_JENKINS) {
+        geckoPath = 'geckodriver';
+        options = new firefox.Options().headless();
+      } else {
+        geckoPath = "geckodriver.exe";
+        options = new firefox.Options();
+      }
+      const serviceBuilder = new firefox.ServiceBuilder(geckoPath);
       this.driver = await new Builder()
         .forBrowser('firefox')
         .setFirefoxService(serviceBuilder)
+        .setFirefoxOptions(options)
         .build();
     }
     return this.driver;
