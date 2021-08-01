@@ -5,6 +5,9 @@ node {
     stage('Dependencies') {
         sh 'npm ci --unsafe-perm'
     }
+    stage('WebDriver') {
+        sh 'npm run driver:linux'
+    }
     stage('Build') {
         sh 'npm run build'
     }
