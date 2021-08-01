@@ -1,4 +1,4 @@
-import {Builder, WebDriver} from "selenium-webdriver";
+import {Builder, Capabilities, WebDriver} from "selenium-webdriver";
 import firefox from "selenium-webdriver/firefox";
 
 export class Driver {
@@ -6,21 +6,20 @@ export class Driver {
 
   public static async start(): Promise<WebDriver> {
     if (!this.driver) {
-      let geckoPath;
-      let options;
       if (process.env.ON_JENKINS) {
-        geckoPath = 'geckodriver';
-        options = new firefox.Options().headless();
+        this.driver = await new Builder()
+          .usingServer("http://172.17.0.13:4444")
+          .withCapabilities(Capabilities.firefox())
+          .forBrowser('firefox')
+          .setFirefoxService(new firefox.ServiceBuilder("geckodriver"))
+          .setFirefoxOptions(new firefox.Options().headless())
+          .build();
       } else {
-        geckoPath = "geckodriver.exe";
-        options = new firefox.Options();
+        this.driver = await new Builder()
+          .forBrowser('firefox')
+          .setFirefoxService(new firefox.ServiceBuilder("geckodriver.exe"))
+          .build();
       }
-      const serviceBuilder = new firefox.ServiceBuilder(geckoPath);
-      this.driver = await new Builder()
-        .forBrowser('firefox')
-        .setFirefoxService(serviceBuilder)
-        .setFirefoxOptions(options)
-        .build();
     }
     return this.driver;
   }
