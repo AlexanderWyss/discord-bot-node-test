@@ -1,0 +1,41 @@
+{
+  "name": "discord-bot-node-test",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "prebuild": "tslint -c tslint.json -p tsconfig.json --fix",
+    "build": "tsc",
+    "pretest": "npm run build",
+    "test": "jest",
+    "test:jenkins": "tsc && jest --ci"
+  },
+  "dependencies": {
+    "@discordjs/opus": "^0.5.0",
+    "@types/he": "^1.1.1",
+    "@types/jest": "^26.0.24",
+    "bufferutil": "^4.0.3",
+    "cookie-parser": "^1.4.5",
+    "debug": "~4.3.1",
+    "discord.js": "^12.5.3",
+    "dotenv": "^8.2.0",
+    "erlpack": "github:discordapp/erlpack",
+    "ffmpeg-static": "^4.3.0",
+    "he": "^1.2.0",
+    "jest": "^27.0.6",
+    "jest-junit": "^12.2.0",
+    "libsodium-wrappers": "^0.7.9",
+    "morgan": "~1.10.0",
+    "selenium-webdriver": "^4.0.0-beta.4",
+    "sqlite": "^4.0.18",
+    "zucc": "^0.1.2"
+  },
+  "devDependencies": {
+    "@types/node": "^12.12.58",
+    "tslint": "^6.1.3",
+    "typescript": "^4.1.3"
+  },
+  "jest": {
+    "rootDir": "dist",
+    "testResultsProcessor": "jest-junit"
+  }
+}
