@@ -8,7 +8,7 @@ export class Driver {
     if (!this.driver) {
       if (process.env.ON_JENKINS) {
         this.driver = await new Builder()
-          .usingServer("http://172.17.0.13:4444")
+          .usingServer("http://localhost:4444")
           .withCapabilities(Capabilities.firefox())
           .forBrowser('firefox')
           .setFirefoxService(new firefox.ServiceBuilder("geckodriver"))
