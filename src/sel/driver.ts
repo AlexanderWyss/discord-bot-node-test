@@ -24,4 +24,9 @@ export class Driver {
     }
     return this.driver;
   }
+
+  public static async stop() {
+    await this.driver.quit();
+    this.driver = undefined;
+  }
 }

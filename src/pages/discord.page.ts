@@ -2,9 +2,17 @@ import {By, Key, until, WebDriver} from "selenium-webdriver";
 import {SearchTrackElement} from "./SearchTrack.element";
 import {CurrentlyPlayingElement} from "./CurrentlyPlaying.element";
 import {QueueTrackElement} from "./QueueTrack.element";
+import {Driver} from "../sel/driver";
 
 export class DiscordPage {
-  public constructor(private driver: WebDriver) {
+  public static async create(): Promise<DiscordPage> {
+    const discord = await new DiscordPage(await Driver.start());
+    await discord.open();
+    await discord.clear();
+    return discord;
+  }
+
+  private constructor(private driver: WebDriver) {
   };
 
   public async inputUrl(text: string): Promise<void> {
@@ -67,6 +75,15 @@ export class DiscordPage {
 
   private async clickTrackInfoButton(buttonSpan: string) {
     await this.driver.findElement(By.xpath(`//div[@id="currentTrackInfo"]//button[span="${buttonSpan}"]`)).click();
+  }
+
+  public async stop() {
+    try {
+      await this.clear();
+      await this.leave();
+    } finally {
+      await Driver.stop();
+    }
   }
 }
 

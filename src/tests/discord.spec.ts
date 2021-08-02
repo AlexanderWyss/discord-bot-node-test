@@ -1,5 +1,3 @@
-import {Driver} from "../sel/driver";
-import {WebDriver} from "selenium-webdriver";
 import {DiscordPage} from "../pages/discord.page";
 import {SearchTrackElement} from "../pages/SearchTrack.element";
 import {bohemian, brokenBones, dontStopMe, goldenBrown, queenMix} from "../assets/video";
@@ -8,23 +6,14 @@ import {assertTrack, LogsAsserter, onJenkins} from "../sel/assertions";
 jest.setTimeout(50000);
 
 describe('Discord', () => {
-  let driver: WebDriver;
   let discord: DiscordPage;
   let logsAsserter: LogsAsserter;
   beforeAll(async () => {
     logsAsserter = new LogsAsserter().rememberTestStartTimestamp();
-    driver = await Driver.start();
-    discord = new DiscordPage(driver);
-    await discord.open();
-    await discord.clear();
+    discord = await DiscordPage.create();
   });
   afterAll(async () => {
-    try {
-      await discord.clear();
-      await discord.leave();
-    } finally {
-      await driver.quit();
-    }
+    await discord.stop();
   })
   it('Join Channel', async () => {
     await discord.joinChannel('test');
