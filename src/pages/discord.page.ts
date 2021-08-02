@@ -1,9 +1,11 @@
 import {By, Key, until, WebDriver} from "selenium-webdriver";
 import {SearchTrackElement} from "./SearchTrack.element";
 import {CurrentlyPlayingElement} from "./CurrentlyPlaying.element";
+import {QueueTrackElement} from "./QueueTrack.element";
 
 export class DiscordPage {
-  public constructor(private driver: WebDriver){};
+  public constructor(private driver: WebDriver) {
+  };
 
   public async search(text: string): Promise<SearchTrackElement[]> {
     const searchInput = await this.driver.findElement(By.css('#urlInput input'));
@@ -14,8 +16,14 @@ export class DiscordPage {
   }
 
   public getSearchResult(): Promise<SearchTrackElement[]> {
-    return this.driver.wait(until.elementsLocated(By.css('#searchList app-track-info')), 10000)
+    return this.driver.wait(until.elementsLocated(By.css('.desktop #searchList app-track-info')), 10000)
       .then(elements => elements.map(element => new SearchTrackElement(element)));
+  }
+
+  public async getQueue(trackAmount = 1): Promise<QueueTrackElement[]> {
+    return this.driver.wait(until.elementsLocated(By.css(`.desktop #queueList app-track-info:nth-of-type(${trackAmount})`)), 10000)
+      .then(() => this.driver.findElements(By.css('.desktop #queueList app-track-info'))
+        .then(elements => elements.map(element => new QueueTrackElement(element))));
   }
 
   public async getCurrentlyPlaying(): Promise<CurrentlyPlayingElement> {
@@ -42,3 +50,4 @@ export class DiscordPage {
     await this.driver.findElement(By.xpath('//app-clear-playlist//button[@id="done-button"]')).click();
   }
 }
+
