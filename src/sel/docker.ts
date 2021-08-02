@@ -11,7 +11,7 @@ export class DockerService {
 
   public getLogs(since: number): Promise<string> {
     return this.container.logs({
-      since: since,
+      since,
       stdout: true,
       stderr: true,
     }).then(value => this.parseLog(value as any as Buffer));
@@ -21,7 +21,7 @@ export class DockerService {
     let log = '';
     let offset = 0;
     while (offset < buffer.length) {
-      if (buffer.readInt8(offset) == 2) {
+      if (buffer.readInt8(offset) === 2) {
         log = log + '[ERROR] ';
       }
       const length = buffer.readUInt32BE(offset + 4);

@@ -37,9 +37,11 @@ describe('Discord', () => {
     expect(await currentlyPlaying.getTitle()).toBe('KALEO "Broken Bones" [Official Audio]');
     expect(await currentlyPlaying.getArtist()).toBe('KALEO');
   });
-  it('Verify Server Logs', async () => {
-    let dockerService = new DockerService();
-    let log = await dockerService.getLogs(testStartTimestamp);
-    expect(log).toBe('');
-  });
+  if (process.env.ON_JENKINS) {
+    it('Verify Server Logs', async () => {
+      const dockerService = new DockerService();
+      const log = await dockerService.getLogs(testStartTimestamp);
+      expect(log).toBe('');
+    });
+  }
 });
