@@ -14,7 +14,7 @@ describe('Discord', () => {
   });
   afterAll(async () => {
     await discord.stop();
-  })
+  });
   it('Join Channel', async () => {
     await discord.joinChannel('test');
   });

@@ -23,6 +23,9 @@ pipeline {
         }
         stage('Test') {
             steps {
+                withCredentials([string(credentialsId: 'Discord_Token_Test', variable: 'token')]) {
+                    sh 'export DISCORD_TOKEN=$token'
+                }
                 sh 'npm run test:jenkins'
                 junit checksName: 'Tests', testResults: 'junit.xml'
             }

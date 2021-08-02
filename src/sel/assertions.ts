@@ -21,3 +21,7 @@ export class LogsAsserter {
 export function onJenkins(): boolean {
   return !!process.env.ON_JENKINS;
 }
+
+export async function wait(ms: number) {
+  await new Promise(resolve => {setTimeout(() => resolve('OK'), ms)});
+}
