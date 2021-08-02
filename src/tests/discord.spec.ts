@@ -6,6 +6,7 @@ describe('Discord', () => {
   let driver: WebDriver;
   let discord: DiscordPage;
   beforeAll(async () => {
+    jest.setTimeout(50000);
     driver = await Driver.start();
     discord = new DiscordPage(driver);
     await discord.open();
