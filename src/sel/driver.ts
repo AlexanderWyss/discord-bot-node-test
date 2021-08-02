@@ -1,12 +1,13 @@
 import {Builder, Capabilities, WebDriver} from "selenium-webdriver";
 import firefox from "selenium-webdriver/firefox";
+import {onJenkins} from "./assertions";
 
 export class Driver {
   private static driver: WebDriver;
 
   public static async start(): Promise<WebDriver> {
     if (!this.driver) {
-      if (process.env.ON_JENKINS) {
+      if (onJenkins()) {
         this.driver = await new Builder()
           .usingServer("http://selenium:4444")
           .withCapabilities(Capabilities.firefox())

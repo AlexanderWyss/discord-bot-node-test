@@ -1,54 +1,18 @@
 import {Driver} from "../sel/driver";
 import {WebDriver} from "selenium-webdriver";
 import {DiscordPage} from "../pages/discord.page";
-import {DockerService} from "../sel/docker";
-import {Track} from "../pages/Track";
 import {SearchTrackElement} from "../pages/SearchTrack.element";
+import {bohemian, brokenBones, dontStopMe, goldenBrown, queenMix} from "../assets/video";
+import {assertTrack, LogsAsserter, onJenkins} from "../sel/assertions";
 
 jest.setTimeout(50000);
-
-interface Video {
-  title: string;
-  artist: string;
-  url: string;
-}
-
-async function assertTrack(track: Track, video: Video) {
-  expect(await track.getTitle()).toBe(video.title);
-  expect(await track.getArtist()).toBe(video.artist);
-}
 
 describe('Discord', () => {
   let driver: WebDriver;
   let discord: DiscordPage;
-  let testStartTimestamp: number;
-  const brokenBones: Video = {
-    title: 'KALEO "Broken Bones" [Official Audio]',
-    artist: 'KALEO',
-    url: 'https://www.youtube.com/watch?v=NOletMMI0B4'
-  };
-  const bohemian: Video = {
-    title: 'Queen – Bohemian Rhapsody (Official Video Remastered)',
-    artist: 'Queen Official',
-    url: 'https://www.youtube.com/watch?v=fJ9rUzIMcZQ'
-  };
-  const goldenBrown: Video = {
-    title: 'Golden Brown - The Stranglers',
-    artist: 'Μουσικές Περιηγήσεις',
-    url: 'https://www.youtube.com/watch?v=AWAsI3U2EaE'
-  };
-  const queenMix: Video = {
-    title: 'Queen & Freddie Mercury Best Songs (Official Videos)',
-    artist: 'italianstyle983',
-    url: 'https://www.youtube.com/watch?v=fJ9rUzIMcZQ&list=PLZYzh1QhBgMark6rrridAXQbozFrlxc12'
-  };
-  const dontStopMe: Video = {
-    title: 'Queen - Don\'t Stop Me Now (Official Video)',
-    artist: 'Queen Official',
-    url: 'https://www.youtube.com/watch?v=HgzGwKwLmgM'
-  };
+  let logsAsserter: LogsAsserter;
   beforeAll(async () => {
-    testStartTimestamp = Math.floor(Date.now() / 1000);
+    logsAsserter = new LogsAsserter().rememberTestStartTimestamp();
     driver = await Driver.start();
     discord = new DiscordPage(driver);
     await discord.open();
@@ -137,11 +101,9 @@ describe('Discord', () => {
     expect(elements.length).toBe(5);
     await assertTrack(elements[4], dontStopMe);
   });
-  if (process.env.ON_JENKINS) {
+  if (onJenkins()) {
     it('Verify Server Logs', async () => {
-      const dockerService = new DockerService();
-      const log = await dockerService.getLogs(testStartTimestamp);
-      expect(log).toBe('');
+      await logsAsserter.assert();
     });
   }
 });
