@@ -26,9 +26,9 @@ export class DiscordPage {
         .then(elements => elements.map(element => new QueueTrackElement(element))));
   }
 
-  public async getCurrentlyPlaying(): Promise<CurrentlyPlayingElement> {
+  public async getCurrentlyPlaying(regex = /.+/): Promise<CurrentlyPlayingElement> {
     const currentlyPlayingElement = new CurrentlyPlayingElement(await this.driver.findElement(By.id('currentTrackInfo')));
-    await this.driver.wait(until.elementTextMatches(currentlyPlayingElement.getTitleElement(), /.+/), 10000)
+    await this.driver.wait(until.elementTextMatches(currentlyPlayingElement.getTitleElement(), regex), 10000)
     return currentlyPlayingElement;
   }
 
@@ -46,12 +46,20 @@ export class DiscordPage {
   }
 
   public async clear() {
-    await this.driver.findElement(By.xpath('//div[@id="currentTrackInfo"]//button[span="delete_sweep"]')).click();
+    await this.clickTrackInfoButton('delete_sweep');
     await this.driver.findElement(By.xpath('//app-clear-playlist//button[@id="done-button"]')).click();
   }
 
   public async skip() {
-    await this.driver.findElement(By.xpath('//div[@id="currentTrackInfo"]//button[span="skip_next"]')).click();
+    await this.clickTrackInfoButton('skip_next');
+  }
+
+  public async previous() {
+    await this.clickTrackInfoButton('skip_previous');
+  }
+
+  private async clickTrackInfoButton(buttonSpan: string) {
+    await this.driver.findElement(By.xpath(`//div[@id="currentTrackInfo"]//button[span="${buttonSpan}"]`)).click();
   }
 }
 

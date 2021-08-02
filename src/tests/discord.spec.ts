@@ -89,6 +89,16 @@ describe('Discord', () => {
     expect(elements.length).toBe(3);
     await assertTrack(elements[0], brokenBones);
   });
+  it('Skip', async () => {
+    await discord.skip();
+    const currentlyPlaying = await discord.getCurrentlyPlaying(/Broken Bones/);
+    await assertTrack(currentlyPlaying, brokenBones);
+  });
+  it('Previous', async () => {
+    await discord.previous();
+    const currentlyPlaying = await discord.getCurrentlyPlaying(/Bohemian Rhapsody/);
+    await assertTrack(currentlyPlaying, bohemian);
+  });
   if (process.env.ON_JENKINS) {
     it('Verify Server Logs', async () => {
       const dockerService = new DockerService();
