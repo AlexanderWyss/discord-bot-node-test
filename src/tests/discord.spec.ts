@@ -11,8 +11,12 @@ describe('Discord', () => {
     await discord.open();
   });
   afterAll(async () => {
-    await discord.leave();
-    await Driver.stop();
+    try {
+      await discord.clear();
+      await discord.leave();
+    } finally {
+      await Driver.stop();
+    }
   })
   it('Join Channel', async () => {
     await discord.joinChannel('test');
@@ -21,5 +25,12 @@ describe('Discord', () => {
     await discord.search('Bohemian rapsody');
     const elements = await discord.search('Broken Bones');
     expect(await elements[0].getArtist()).toBe('KALEO');
+  });
+  it('Play', async () => {
+    await discord.clear();
+    await (await discord.getSearchResult())[0].now();
+    const currentlyPlaying = await discord.getCurrentlyPlaying();
+    expect(await currentlyPlaying.getTitle()).toBe('KALEO "Broken Bones" [Official Audio]');
+    expect(await currentlyPlaying.getArtist()).toBe('KALEO');
   });
 });
