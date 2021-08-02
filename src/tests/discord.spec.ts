@@ -2,6 +2,7 @@ import {Driver} from "../sel/driver";
 import {WebDriver} from "selenium-webdriver";
 import {DiscordPage} from "../pages/discord.page";
 
+jest.setTimeout(50000);
 describe('Discord', () => {
   let driver: WebDriver;
   let discord: DiscordPage;
@@ -29,6 +30,7 @@ describe('Discord', () => {
   it('Play', async () => {
     await discord.clear();
     await (await discord.getSearchResult())[0].now();
+    // TODO check no error
     const currentlyPlaying = await discord.getCurrentlyPlaying();
     expect(await currentlyPlaying.getTitle()).toBe('KALEO "Broken Bones" [Official Audio]');
     expect(await currentlyPlaying.getArtist()).toBe('KALEO');
