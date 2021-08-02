@@ -23,10 +23,4 @@ export class Driver {
     }
     return this.driver;
   }
-
-  public static async stop() {
-    if (this.driver) {
-      await this.driver.quit();
-    }
-  }
 }
