@@ -2,7 +2,6 @@ import {Driver} from "../sel/driver";
 import {WebDriver} from "selenium-webdriver";
 import {DiscordPage} from "../pages/discord.page";
 
-jest.setTimeout(50000);
 describe('Discord', () => {
   let driver: WebDriver;
   let discord: DiscordPage;
