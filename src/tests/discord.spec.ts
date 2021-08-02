@@ -11,8 +11,12 @@ describe('Discord', () => {
     await discord.open();
   });
   afterAll(async () => {
+    await discord.leave();
     await Driver.stop();
   })
+  it('Join Channel', async () => {
+    await discord.joinChannel('test');
+  });
   it('Test', async () => {
     await discord.search('Bohemian rapsody');
     const elements = await discord.search('Broken Bones');

@@ -13,6 +13,15 @@ export class DiscordPage {
       .then(elements => elements.map(element => new SearchTrackElement(element)));
   }
 
+  public async joinChannel(channel: string): Promise<void> {
+    await this.driver.findElement(By.xpath('//div[@id="title-container"]//button[span="Channels"]')).click();
+    await this.driver.findElement(By.xpath(`//app-join-channel//button[span="${channel}"]`)).click();
+  }
+
+  public async leave(): Promise<void> {
+    await this.driver.findElement(By.xpath('//div[@id="title-container"]//button[span="Leave"]')).click();
+  }
+
   async open(): Promise<void> {
     await this.driver.get('https://discord.wyss.tech/player/453485032204402688');
   }
