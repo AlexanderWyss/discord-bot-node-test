@@ -37,6 +37,16 @@ describe('Discord', () => {
     artist: 'Μουσικές Περιηγήσεις',
     url: 'https://www.youtube.com/watch?v=AWAsI3U2EaE'
   };
+  const queenMix: Video = {
+    title: 'Queen & Freddie Mercury Best Songs (Official Videos)',
+    artist: 'italianstyle983',
+    url: 'https://www.youtube.com/watch?v=fJ9rUzIMcZQ&list=PLZYzh1QhBgMark6rrridAXQbozFrlxc12'
+  };
+  const dontStopMe: Video = {
+    title: 'Queen - Don\'t Stop Me Now (Official Video)',
+    artist: 'Queen Official',
+    url: 'https://www.youtube.com/watch?v=HgzGwKwLmgM'
+  };
   beforeAll(async () => {
     testStartTimestamp = Math.floor(Date.now() / 1000);
     driver = await Driver.start();
@@ -109,6 +119,23 @@ describe('Discord', () => {
     const elements = await discord.getQueue(4);
     expect(elements.length).toBe(4);
     await assertTrack(elements[3], goldenBrown);
+  });
+  it('Browse Playlist', async () => {
+    const searchPlaylist = (await discord.search(queenMix.title))[0];
+    expect(await searchPlaylist.isPlaylist()).toBeTruthy();
+    await assertTrack(searchPlaylist, queenMix);
+    await searchPlaylist.browse();
+    const searchResult = await discord.getSearchResult();
+    expect(searchResult.length).toBeGreaterThan(25);
+    await assertTrack(searchResult[0], bohemian);
+    await assertTrack(searchResult[1], dontStopMe);
+  });
+  it('Queue in Playlist', async () => {
+    const searchResult = await discord.getSearchResult();
+    await searchResult[1].queue();
+    const elements = await discord.getQueue(5);
+    expect(elements.length).toBe(5);
+    await assertTrack(elements[4], dontStopMe);
   });
   if (process.env.ON_JENKINS) {
     it('Verify Server Logs', async () => {
