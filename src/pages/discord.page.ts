@@ -7,6 +7,13 @@ export class DiscordPage {
   public constructor(private driver: WebDriver) {
   };
 
+  public async inputUrl(text: string): Promise<void> {
+    const searchInput = await this.driver.findElement(By.css('#urlInput input'));
+    await searchInput.click()
+    await searchInput.sendKeys(text);
+    await searchInput.sendKeys(Key.ENTER);
+  }
+
   public async search(text: string): Promise<SearchTrackElement[]> {
     const searchInput = await this.driver.findElement(By.css('#urlInput input'));
     await searchInput.click()

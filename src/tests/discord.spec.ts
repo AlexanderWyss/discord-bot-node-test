@@ -32,6 +32,11 @@ describe('Discord', () => {
     artist: 'Queen Official',
     url: 'https://www.youtube.com/watch?v=fJ9rUzIMcZQ'
   };
+  const goldenBrown: Video = {
+    title: 'Golden Brown - The Stranglers',
+    artist: 'Μουσικές Περιηγήσεις',
+    url: 'https://www.youtube.com/watch?v=AWAsI3U2EaE'
+  };
   beforeAll(async () => {
     testStartTimestamp = Math.floor(Date.now() / 1000);
     driver = await Driver.start();
@@ -98,6 +103,12 @@ describe('Discord', () => {
     await discord.previous();
     const currentlyPlaying = await discord.getCurrentlyPlaying(/Bohemian Rhapsody/);
     await assertTrack(currentlyPlaying, bohemian);
+  });
+  it('Search with URL', async () => {
+    await discord.inputUrl(goldenBrown.url);
+    const elements = await discord.getQueue(4);
+    expect(elements.length).toBe(4);
+    await assertTrack(elements[3], goldenBrown);
   });
   if (process.env.ON_JENKINS) {
     it('Verify Server Logs', async () => {
