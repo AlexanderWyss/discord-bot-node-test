@@ -49,5 +49,9 @@ export class DiscordPage {
     await this.driver.findElement(By.xpath('//div[@id="currentTrackInfo"]//button[span="delete_sweep"]')).click();
     await this.driver.findElement(By.xpath('//app-clear-playlist//button[@id="done-button"]')).click();
   }
+
+  public async skip() {
+    await this.driver.findElement(By.xpath('//div[@id="currentTrackInfo"]//button[span="skip_next"]')).click();
+  }
 }
 

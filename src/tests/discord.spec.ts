@@ -3,6 +3,7 @@ import {WebDriver} from "selenium-webdriver";
 import {DiscordPage} from "../pages/discord.page";
 import {DockerService} from "../sel/docker";
 import {Track} from "../pages/Track";
+import {SearchTrackElement} from "../pages/SearchTrack.element";
 
 jest.setTimeout(50000);
 
@@ -50,28 +51,40 @@ describe('Discord', () => {
     await discord.joinChannel('test');
   });
   it('Search', async () => {
-    const elements = await discord.search(brokenBones.title);
-    await assertTrack(elements[0], brokenBones);
+    const elements = await discord.search(bohemian.title);
+    await assertTrack(elements[0], bohemian);
   });
   it('Play', async () => {
-    await (await discord.getSearchResult())[0].now();
+    const searchTrack = (await discord.getSearchResult())[0];
+    await searchTrack.now();
     const currentlyPlaying = await discord.getCurrentlyPlaying();
-    await assertTrack(currentlyPlaying, brokenBones);
+    await assertTrack(currentlyPlaying, bohemian);
   });
   it('Add song for testing', async () => {
-    await (await discord.getSearchResult())[5].next();
+    const searchResult = await discord.getSearchResult();
+    let searchTrack: SearchTrackElement;
+    for (let i = 1; i < 20 && !searchTrack; i++) {
+      if (!(await searchResult[i].isPlaylist())) {
+        searchTrack = searchResult[i];
+      }
+    }
+    expect(searchTrack).not.toBeNull();
+    await searchTrack.next();
     const elements = await discord.getQueue();
     expect(elements.length).toBe(1);
-    expect(await elements[0].getTitle()).not.toBe(brokenBones.title);
   });
   it('Queue', async () => {
-    await (await discord.search(bohemian.title))[0].queue();
+    const searchTrack = (await discord.search(bohemian.title))[0];
+    await assertTrack(searchTrack, bohemian);
+    await searchTrack.queue();
     const elements = await discord.getQueue(2);
     expect(elements.length).toBe(2);
     await assertTrack(elements[1], bohemian);
   });
   it('Next', async () => {
-    await (await discord.search(brokenBones.title))[0].next();
+    const searchTrack = (await discord.search(brokenBones.title))[0];
+    await assertTrack(searchTrack, brokenBones);
+    await searchTrack.next();
     const elements = await discord.getQueue(3);
     expect(elements.length).toBe(3);
     await assertTrack(elements[0], brokenBones);

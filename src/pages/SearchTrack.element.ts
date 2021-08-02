@@ -21,4 +21,11 @@ export class SearchTrackElement extends TrackElement {
   public async radio(): Promise<void> {
     await this.button("Radio");
   }
+
+  public async isPlaylist(): Promise<boolean> {
+    return (await this.element.findElements(this.buttonXpath("Browse"))).length !== 0;
+  }
+  public async browse(): Promise<void> {
+    await this.button("Browse");
+  }
 }

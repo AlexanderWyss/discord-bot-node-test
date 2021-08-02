@@ -18,6 +18,10 @@ export abstract class TrackElement implements Track {
   }
 
   protected async button(text: string) {
-    await this.element.findElement(By.xpath(`.//div[@class="buttons"]//button[span="${text}"]`)).click();
+    await this.element.findElement(this.buttonXpath(text)).click();
+  }
+
+  protected buttonXpath(text: string) {
+    return By.xpath(`.//div[@class="buttons"]//button[span="${text}"]`);
   }
 }
