@@ -2,6 +2,7 @@ import {Driver} from "../sel/driver";
 import {WebDriver} from "selenium-webdriver";
 import {DiscordPage} from "../pages/discord.page";
 
+jest.setTimeout(50000)
 describe('Discord', () => {
   let driver: WebDriver;
   let discord: DiscordPage;
@@ -21,7 +22,7 @@ describe('Discord', () => {
   it('Join Channel', async () => {
     await discord.joinChannel('test');
   });
-  it('Test', async () => {
+  it('Search', async () => {
     await discord.search('Bohemian rapsody');
     const elements = await discord.search('Broken Bones');
     expect(await elements[0].getArtist()).toBe('KALEO');
