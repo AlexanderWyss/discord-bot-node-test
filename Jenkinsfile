@@ -30,12 +30,12 @@ pipeline {
     }
     post {
         failure {
-            mail to: 'admin@wyss.tech',
+            mail to: 'alexsilvan.wyss@gmail.com',
                  subject: "Failed Pipeline: ${currentBuild.fullDisplayName}",
                  body: "Something is wrong with ${env.BUILD_URL}"
         }
         unstable {
-            mail to: 'admin@wyss.tech',
+            mail to: 'alexsilvan.wyss@gmail.com',
                  subject: "Unstable Pipeline: ${currentBuild.fullDisplayName}",
                  body: "Something is wrong with ${env.BUILD_URL}"
         }
