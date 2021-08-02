@@ -2,20 +2,30 @@ pipeline {
     agent any
     stages {
         stage('Clone repository') {
-            checkout scm
+            steps {
+                checkout scm
+            }
         }
         stage('Dependencies') {
-            sh 'npm ci --unsafe-perm'
+            steps {
+                sh 'npm ci --unsafe-perm'
+            }
         }
         stage('WebDriver') {
-            sh 'npm run driver:linux'
+            steps {
+                sh 'npm run driver:linux'
+            }
         }
         stage('Build') {
-            sh 'npm run build'
+            steps {
+                sh 'npm run build'
+            }
         }
         stage('Test') {
-            sh 'npm run test:jenkins'
-            junit checksName: 'Tests', testResults: 'junit.xml'
+            steps {
+                sh 'npm run test:jenkins'
+                junit checksName: 'Tests', testResults: 'junit.xml'
+            }
         }
     }
     post {
