@@ -21,6 +21,11 @@ pipeline {
                 sh 'npm run build'
             }
         }
+        stage('Restart test env') {
+            steps {
+                sh 'docker restart discord-bot-node'
+            }
+        }
         stage('Test') {
             steps {
                 withCredentials([string(credentialsId: 'Discord_Token_Test', variable: 'token')]) {
