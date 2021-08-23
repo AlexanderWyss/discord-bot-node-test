@@ -11,11 +11,6 @@ pipeline {
                 sh 'npm ci --unsafe-perm'
             }
         }
-        stage('WebDriver') {
-            steps {
-                sh 'npm run driver:linux'
-            }
-        }
         stage('Build') {
             steps {
                 sh 'npm run build'
@@ -24,6 +19,11 @@ pipeline {
         stage('Restart test env') {
             steps {
                 sh 'docker restart discord-bot-node'
+            }
+        }
+        stage('WebDriver') {
+            steps {
+                sh 'npm run driver:linux'
             }
         }
         stage('Test') {
